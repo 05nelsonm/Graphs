@@ -21,10 +21,10 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if user_id == friend_id:
-            print("WARNING: You cannot be friends with yourself")
+            # print("WARNING: You cannot be friends with yourself")
             return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
-            print("WARNING: Friendship already exists")
+            # print("WARNING: Friendship already exists")
             return False
         else:
             self.friendships[user_id].add(friend_id)
@@ -145,15 +145,65 @@ class SocialGraph:
         return visited
 
 
+# 1. To create 100 users with an average of 10 friends each, how many
+#    times would you need to call `add_friendship()`? Why?
+#
+#        A: 100 * 10 // 2 = 500
+
+# 2. If you create 1000 users with an average of 5 random friends
+#    each, what percentage of other users will be in a particular
+#    user's extended social network?
+#
+#        A:     Running a test of:
+#               sg = SocialGraph()
+#               sg.populate_graph(1000, 5)
+#               connections = sg.get_all_social_paths(1)
+#               print(len(connections) / 1000)
+#
+#               Answer = 0.99
+#
+#    What is the average degree of separation between a user and
+#    those in his/her extended network?
+#
+#        A:     Running a test of:
+#               sg = SocialGraph()
+#               sg.populate_graph(1000, 5)
+#               connections = sg.get_all_social_paths(1)
+#               print(len(connections) / 1000)
+#               total = 0
+#               for path in connections.values():
+#                   total += len(path)
+#               print(f"Avg degrees of separation = {total / len(connections) - 1}")
+#
+#               Answer = ~4.5
+
+# 3. You might have found the results from question #2 above to be
+#    surprising. Would you expect results like this in real life?
+#
+#        A: No.
+#
+#    If not, what are some ways you could improve your friendship
+#    distribution model for more realistic results?
+#
+#        A: Use a Voronoi algorithm that accounts for clustering.
+
+# 4. If you followed the hints for part 1, your `populate_graph()` will
+#    run in O(n^2) time. Refactor your code to run in O(n) time. Are
+#    there any tradeoffs that come with this implementation?
+#
+#        A: After a certain density, Linear Populate takes much longer
+#           to populate because of collisions.
+
+
 if __name__ == '__main__':
-    sg = SocialGraph()
-    sg.populate_graph(10, 2)
-    print(sg.friendships)
-    connections = sg.get_all_social_paths(1)
-    print(connections)
+    # sg = SocialGraph()
+    # sg.populate_graph(10, 2)
+    # print(sg.friendships)
+    # connections = sg.get_all_social_paths(1)
+    # print(connections)
 
     num_users = 2000
-    avg_friendships = 1999
+    avg_friendships = 400
     sg = SocialGraph()
     start_time = time.time()
     sg.populate_graph(num_users, avg_friendships)
@@ -162,8 +212,8 @@ if __name__ == '__main__':
     print(f"Quadratic populate: {end_time - start_time} seconds")
     print("-----\n\n")
 
-    # sg = SocialGraph()
-    # start_time = time.time()
-    # sg.populate_graph_linear(num_users, avg_friendships)
-    # end_time = time.time()
-    # print(f"Linear populate: {end_time - start_time} seconds")
+    sg = SocialGraph()
+    start_time = time.time()
+    sg.populate_graph_linear(num_users, avg_friendships)
+    end_time = time.time()
+    print(f"Linear populate: {end_time - start_time} seconds")
